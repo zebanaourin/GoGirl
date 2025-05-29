@@ -1,0 +1,39 @@
+<div class="page-container">
+  <div class="left-panel">
+    <div class="routine-card" *ngFor="let routine of routines; let i = index">
+      <div class="routine-header" (click)="toggleMuscleGroup(i.toString())">
+        <h4>
+          {{ routine.muscleGroup }} : {{ routine.date | date:'dd-MM-yyyy' }}
+          <span>{{ expandedMuscles[i] ? '▲' : '▼' }}</span>
+        </h4>
+      </div>
+
+      <div *ngIf="expandedMuscles[i]">
+        <div class="workout" *ngFor="let workout of routine.workouts; let j = index">
+          <div class="exercise" (click)="toggleExercise(i + '-' + j)">
+            <b>{{ workout.name }}</b>
+            <span>{{ expandedExercises[i + '-' + j] ? '▲' : '▼' }}</span>
+            <hr>
+          </div>
+
+          <table class="table" *ngIf="expandedExercises[i + '-' + j]">
+            <thead>
+              <tr>
+                <th>Set</th>
+                <th>Reps</th>
+                <th>Weight</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let set of workout.sets; let k = index">
+                <td>{{ k + 1 }}</td>
+                <td>{{ set.reps }}</td>
+                <td>{{ set.weights }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+
+  <div class="routine-container scroll">
+    <h2>💪 My Cute Workout Routine</h2>
+  
+    <form (ngSubmit)="save()" #form="ngForm">
+      <div class="top-form">
+        <label>Date:</label>
+        <input type="date" [(ngModel)]="routine.date" name="date" [readonly]="editMode" required />
+  
+        <label>Muscle Group:</label>
+        <input type="text" [(ngModel)]="routine.muscleGroup" name="muscleGroup" required />
+      </div>
+  
+      <div *ngFor="let workout of routine.workouts; let i = index" class="workout-box">
+        <h4>🏋️ Workout {{ i + 1 }}</h4>
+        <input
+          class="workout-input"
+          [(ngModel)]="workout.name"
+          name="workoutName{{ i }}"
+          placeholder="Workout name 💕"
+        />
+  
+        <div class="sets-container">
+          <button type="button" class="icon-btn" (click)="addSet(workout)">➕</button>
+  
+          <div
+            *ngFor="let set of workout.sets; let j = index"
+            class="set-line"
+          >
+            <input
+              type="number"
+              [(ngModel)]="set.reps"
+              name="reps{{ i }}{{ j }}"
+              placeholder="Reps"
+            />
+            <input
+              type="number"
+              [(ngModel)]="set.weights"
+              name="weight{{ i }}{{ j }}"
+              placeholder="Weight"
+            />
+            <button type="button" class="icon-btn" (click)="removeSet(workout, j)">🗑️</button>
+          </div>
+        </div>
+  
+        <button type="button" class="remove-workout" (click)="removeWorkout(i)">🗑️ Remove Workout</button> 
+      </div>
+  
+      <div class="butt">
+        <button type="button" (click)="addWorkout()">➕ Add Workout</button>
+        <button type="submit">💾 Save Routine</button>
+      </div>
+    </form>
+  </div>
+  

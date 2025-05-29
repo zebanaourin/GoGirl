@@ -1,0 +1,114 @@
+<div class="tracker-container">
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+      <div class = "left-panel-heading"> 
+        <h2>Calorie Ring</h2>
+      </div>
+
+      <div class="ring-chart">
+        <p><strong>{{ getConsumedCalories() }} / {{ calorieGoal }}</strong> kcal</p>
+        <progress max="{{ calorieGoal }}" value="{{ getConsumedCalories() }}"></progress>
+      </div>
+  
+      <!-- Date Selection -->
+    <div class="date-picker">
+        <label for="selectedDate"><strong>Select Date :   </strong></label>
+        <input type="date" id="selectedDate" [(ngModel)]="selectedDate" name="selectedDate" (change)="onDateChange()" />
+    </div>
+  
+
+      <div class="meal-forms">
+        <form (ngSubmit)="submitAllMeals()">
+          <div *ngFor="let type of mealTypes">
+            <div class = "meal-heading">
+                <h3>{{ type }}</h3>
+            </div>
+            <div class= "form-styling">
+                <input [(ngModel)]="newMeals[type].foodName" name="{{ type }}Name" placeholder="Food name" />
+                <input [(ngModel)]="newMeals[type].calories" name="{{ type }}Calories" type="number" placeholder="Calories" />
+            </div>
+            </div>
+            <div class="button-container">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+
+        <div class="date-picker">
+            <label for="date"><strong>Date : </strong> </label>
+            <input type="date" id="date" [(ngModel)]="selectedDate" (change)="loadData()" />
+        </div>
+
+     
+        <div class="Todays-meal">
+            <h3>Today's Meals</h3>
+            <p><strong>Total Calories Consumed:</strong> {{ getConsumedCalories() }} kcal</p>
+          
+            <div class="meal-table">
+              <div class="meal-row header">
+                <div>Meal Type</div>
+                <div>Food Name</div>
+                <div>Calories</div>
+              </div>
+          
+              <ng-container *ngFor="let type of mealTypes">
+                <ng-container *ngFor="let item of getMealsByType(type)">
+                  <div class="meal-row">
+                    <div>{{ type }}</div>
+                    <div>{{ item.foodName }}</div>
+                    <div>{{ item.calories }} kcal</div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+          
+
+      <div>
+        <div class = 'button-container'>
+            <button (click)="showHistory = !showHistory">
+                {{ showHistory ? 'Hide' : 'Show' }} Meal History
+              </button>
+        </div>
+        
+      
+        <div class = "date-picker">
+            <div class = "show-past">
+                <div *ngIf="showHistory" style="margin-top: 10px;">
+                    <label for="historyDays"><strong>Show past: </strong></label>
+                    <select id="historyDays" [(ngModel)]="historyDays" (change)="onHistoryDaysChange()">
+                      <option [value]="3">3 days</option>
+                      <option [value]="7">7 days</option>
+                      <option [value]="30">30 days</option>
+                    </select>
+                  </div>
+            </div>
+        </div>
+      </div>
+      
+      <div *ngIf="showHistory">
+        <h2>Meal History</h2>
+        <div *ngFor="let group of groupedMealHistory; let i = index" class="day-history-box">
+          <h3>{{ group.date }}</h3>
+          <p><strong>Total Calories:</strong> {{ group.totalCalories }} cal</p>
+          <ul>
+            <li *ngFor="let meal of group.meals">
+              <div class="Listt">
+                {{ meal.mealType }}: {{ meal.foodName }} - {{ meal.calories }} cal
+              <button (click)="deleteMeal(meal.id, i)">🗑️ Delete</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+
+
+
+    </div>
+  </div>
+  
